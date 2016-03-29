@@ -4,6 +4,132 @@
 *
 */
 
+var index = 1992;
+
+var data = {
+  "1992": {
+    "Republican": "28",
+    "Democrat": "33",
+    "Independent":"36"
+  },
+  "1993": {
+    "Republican":"27",
+    "Democrat":"34",
+    "Independent":"34"
+  },
+  "1994": {
+    "Republican":"30",
+    "Democrat":"32",
+    "Independent":"34"
+  },
+  "1995": {
+    "Republican":"31",
+    "Democrat":"30",
+    "Independent":"33"
+  },
+  "1996": {
+    "Republican":"29",
+    "Democrat":"33",
+    "Independent":"33"
+  },
+  "1997": {
+    "Republican":"28",
+    "Democrat":"33",
+    "Independent":"32"
+  },
+  "1998": {
+    "Republican":"28",
+    "Democrat":"34",
+    "Independent":"31"
+  }
+  /*
+  ,
+  "1999": {
+    "rep":"27",
+    "dem":"33",
+    "indep":"34"
+  },
+  "2000": {
+    "rep":"28",
+    "dem":"33",
+    "indep":"29"
+  },
+  "2001": {
+    "rep":"29",
+    "dem":"34",
+    "indep":"29"
+  },
+  "2002": {
+    "rep":"30",
+    "dem":"31",
+    "indep":"30"
+  },
+  "2003": {
+    "rep":"30",
+    "dem":"31",
+    "indep":"31"
+  },
+  "2004": {
+    "rep":"",
+    "dem":"",
+    "indep":""
+  },
+  "2005": {
+    "rep":"29",
+    "dem":"33",
+    "indep":"30"
+  },
+  "2006": {
+    "rep":"28",
+    "dem":"33",
+    "indep":"30"
+  },
+  "2007": {
+    "rep":"25",
+    "dem":"33",
+    "indep":"34"
+  },
+  "2008": {
+    "rep":"25",
+    "dem":"35",
+    "indep":"31"
+  },
+  "2009": {
+    "rep":"24",
+    "dem":"34",
+    "indep":"35"
+  },
+  "2010": {
+    "rep":"25",
+    "dem":"33",
+    "indep":"36"
+  },
+  "2011": {
+    "rep":"24",
+    "dem":"32",
+    "indep":"37"
+  },
+  "2012": {
+    "rep":"25",
+    "dem":"32",
+    "indep":"37"
+  },
+  "2013": {
+    "rep":"24",
+    "dem":"32",
+    "indep":"38"
+  },
+  "2014": {
+    "rep":"23",
+    "dem":"32",
+    "indep":"39"
+  },
+  "2015": {
+    "rep":"23.7",
+    "dem":"30.4",
+    "indep":"40.1"
+  }*/
+};
 
 //Initialize the svgs
 var svg = d3.select("body")
@@ -127,19 +253,22 @@ var color = d3.scale.ordinal()
   "indep":"36"
 }*/
 
-function getData() {
-  $.getJSON('data.json', function() {
-
+/* TODO: i = (index) year from draggy bar element in HTML */
+var getData = function getData(i) {
+  var labels = color.domain();
+  return labels.map(function(label) {
+    return { label: label, value: data[i.toString()][label]}
   })
+  return data[index.toString()];
 };
 
 
-change(getData());
+change(getData(document.getElementById("year").value));
 
 function change(data) {
 	var duration = +document.getElementById("duration").value;
 	var data0 = svg.select(".slices").selectAll("path.slice")
-		.data().map( getData(), function(d) { return d.data });
+		.data().map( getData, function(d) { return d.data });
 	if (data0.length == 0) data0 = data;
 	var was = mergeWithFirstEqualZero(data, data0);
 	var is = mergeWithFirstEqualZero(data0, data);
@@ -148,7 +277,7 @@ function change(data) {
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(was), key); //refer to big comment to see what "was" is
+		.data(pie(was), key); //refer to couple lines above to see what "was" is
 
 	slice.enter()
 		.insert("path")
