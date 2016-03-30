@@ -1,5 +1,5 @@
 /* Software Development p.3
-*
+*  By: Amanda Chiu, Wayez Chowdhury, Jeffrey Zou
 *
 *
 */
@@ -191,17 +191,7 @@ var color = d3.scale.ordinal()
   		change(randomData());
   	});
   //Make a pie
-  function mergeWithFirstEqualZero(first, second){
-  	var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
 
-  	var onlyFirst = first
-  		.filter(function(d){ return !secondSet.has(d.label) })
-  		.map(function(d) { return {label: d.label, value: 0}; });
-  	return d3.merge([ second, onlyFirst ])
-  		.sort(function(a,b) {
-  			return d3.ascending(a.label, b.label);
-  		});
-  }
   function change(data) {
   	var duration = +document.getElementById("duration").value;
   	var data0 = svg.select(".slices").selectAll("path.slice")
@@ -253,6 +243,19 @@ var color = d3.scale.ordinal()
   "indep":"36"
 }*/
 
+function mergeWithFirstEqualZero(first, second){
+  var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
+
+  var onlyFirst = first
+    .filter(function(d){ return !secondSet.has(d.label) })
+    .map(function(d) { return {label: d.label, value: 0}; });
+  return d3.merge([ second, onlyFirst ])
+    .sort(function(a,b) {
+      return d3.ascending(a.label, b.label);
+    });
+}
+
+
 /* TODO: i = (index) year from draggy bar element in HTML */
 var getData = function getData(i) {
   var labels = color.domain();
@@ -262,16 +265,17 @@ var getData = function getData(i) {
   return data[index.toString()];
 };
 
-
 change(getData(document.getElementById("year").value));
 
 function change(data) {
-	var duration = +document.getElementById("duration").value;
+	var duration = document.getElementById('year').value;
 	var data0 = svg.select(".slices").selectAll("path.slice")
 		.data().map( getData, function(d) { return d.data });
 	if (data0.length == 0) data0 = data;
 	var was = mergeWithFirstEqualZero(data, data0);
 	var is = mergeWithFirstEqualZero(data0, data);
+  console.log(was);
+  console.log(is);
   //Change the data represented on the donut graph based on a subset of the data
 
 	/* ------- SLICE ARCS -------*/
