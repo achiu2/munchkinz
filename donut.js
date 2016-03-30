@@ -4,7 +4,9 @@
 *
 */
 
-var index = 1992;
+var index = document.getElementById('year').value;
+var max = document.getElementById('year').max;
+var min = document.getElementById('year').min;
 
 var data = {
   "1992": {
@@ -68,14 +70,14 @@ var data = {
     "Independent":"31"
   },
   "2004": {
-    "Republican":"",
-    "Democrat":"",
-    "Independent":""
+    "Republican":"29",
+    "Democrat":"33",
+    "Independent":"30"
   },
   "2005": {
     "Republican":"29",
     "Democrat":"33",
-    "Independent":"30"
+    "Independent":"31"
   },
   "2006": {
     "Republican":"28",
@@ -253,8 +255,6 @@ function mergeWithFirstEqualZero(first, second){
     });
 }
 
-
-/* TODO: i = (index) year from draggy bar element in HTML */
 var getData = function getData() {
   var labels = color.domain();
   return labels.map(function(label) {
@@ -319,7 +319,7 @@ function change(data) {
 
 change(getData());
 
-//Event components
+//Event component
 
 var slider = document.getElementById('year');
 slider.addEventListener('change', function(e) {
@@ -327,23 +327,14 @@ slider.addEventListener('change', function(e) {
   index = e.target.value;
   console.log(index);
 });
-/*
-var magic = document.getElementsByClassName('magic')[0];
-magic.addEventListener('click', function(e) {
-  e.preventDefault();
-  var newData = getData();
-  change(newData);
-});
-*/
 
 /* Automatic stuff */
 //Call the change function, change the interval, and move the slider
 var beginMove = function() {
-  console.log('HI');
   change(getData());
-  if (index == 1998) {
-    index = 1992;
-    document.getElementById('year').stepDown(6);
+  if (index == max) {
+    index = min;
+    document.getElementById('year').stepDown(max-min);
   }
   else {
     index++;
@@ -354,7 +345,6 @@ var beginMove = function() {
 var interval;
 var start = document.getElementsByClassName('move')[0];
 start.addEventListener('click', function(e) {
-  console.log('hi');
   interval = setInterval(beginMove, 3000);
 });
 
