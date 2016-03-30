@@ -280,7 +280,8 @@ function change(data) {
     var percents = svg.select('.percents').selectAll('text')
       .data(pie(is), key);
 
-    console.log(percents);
+    console.log(is);
+    
     percents.enter()
       .append('text')
       .attr('dy', '20px')
