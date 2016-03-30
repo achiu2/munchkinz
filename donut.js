@@ -240,7 +240,7 @@ function change(data) {
 
     text.enter()
       .append('text')
-      .attr('dy', '0.35em')
+      .attr('dy', '-5px')
       .text(function(d) {
         return d.data.label;
       });
