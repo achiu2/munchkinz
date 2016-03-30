@@ -149,6 +149,8 @@ svg.append("g")
 var width = window.innerWidth,
     height = 500,
 	radius = Math.min(width, height) / 2;
+  
+svg.attr("transform", "translate(" + width / 2 + "," + (height / 2 - 50) + ")");
 
 var pie = d3.layout.pie()
 	.sort(null)
@@ -164,7 +166,7 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
-svg.attr("transform", "translate(" + width / 2 + "," + (height / 2 - 50) + ")");
+
 
 var key = function(d){ return d.data.label; };
 
@@ -281,7 +283,7 @@ function change(data) {
       .data(pie(is), key);
 
     console.log(is);
-    
+
     percents.enter()
       .append('text')
       .attr('dy', '20px')
