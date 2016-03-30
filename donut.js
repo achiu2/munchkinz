@@ -202,9 +202,12 @@ function shuffle(first, second) {
 }
 
 function change(data) {
+
+  //for animation on load
   data0 = data;
   var was = shuffle(data, data0);
   var is = shuffle(data0, data);
+  
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
