@@ -139,6 +139,10 @@ svg.append("g")
 
 svg.append("g")
 	.attr("class", "labels");
+
+svg.append("g")
+  .attr("class", "percents");
+
 svg.append("g")
 	.attr("class", "lines");
 
@@ -173,7 +177,6 @@ var getData = function getData() {
   return labels.map(function(label) {
     return { label: label, value: data[index.toString()][label]}
   })
-  return data[index.toString()];
 };
 
 d3.select('.magic')
@@ -236,8 +239,6 @@ function change(data) {
     var text = svg.select('.labels').selectAll('text')
       .data(pie(is), key);
 
-    console.log(text);
-
     text.enter()
       .append('text')
       .attr('dy', '-5px')
@@ -245,7 +246,6 @@ function change(data) {
         return d.data.label;
       });
 
-    console.log(text);
     //Find the angle halfway between the end of the beginning
     function midAngle(d) {
       return d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -275,29 +275,68 @@ function change(data) {
   			};
   		});
 
-  	text.exit()
-  		.remove();
+    text.exit()
+      .remove();
 
-    /* ------- SLICE TO TEXT POLYLINES -------*/
+    var percents = svg.select('.percents').selectAll('text')
+      .data(pie(is), key);
+    percents.enter()
+      .append('text')
+      .attr('dy', '+20px')
+      .text(function(d) {
+        return d.value+'%';
+      });
 
-  	var polyline = svg.select(".lines").selectAll("polyline")
-  		.data(pie(data), key);
+      console.log(percents);
 
-  	polyline.enter()
-  		.append("polyline");
+      percents.transition().duration(1000)
+    		.attrTween("transform", function(d) {
+    			this._current = this._current || d;
+    			var interpolate = d3.interpolate(this._current, d);
+    			this._current = interpolate(0);
+          console.log(this);
+    			return function(t) {
+    				var d2 = interpolate(t);
+    				var pos = outerArc.centroid(d2);
+            //If the half-way angle is less than pi -> radius * 1 else radius * -1
+    				pos[0] = radius * (midAngle(d2) < Math.PI ? -1 : 1);
+    				return "translate("+ pos +")";
+    			};
+    		})
+    		.styleTween("text-anchor", function(d){
+    			this._current = this._current || d;
+    			var interpolate = d3.interpolate(this._current, d);
+    			this._current = interpolate(0);
+    			return function(t) {
+    				var d2 = interpolate(t);
+    				return midAngle(d2) < Math.PI ? "start":"end";
+    			};
+    		});
 
-  	polyline.transition().duration(1000)
-  		.attrTween("points", function(d){
-  			this._current = this._current || d;
-  			var interpolate = d3.interpolate(this._current, d);
-  			this._current = interpolate(0);
-  			return function(t) {
-  				var d2 = interpolate(t);
-  				var pos = outerArc.centroid(d2);
-  				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-  				return [arc.centroid(d2), outerArc.centroid(d2), pos];
-  			};
-  		});
+    	percents.exit()
+    		.remove();
+
+
+  /* ------- SLICE TO TEXT POLYLINES -------*/
+
+	var polyline = svg.select(".lines").selectAll("polyline")
+		.data(pie(data), key);
+
+	polyline.enter()
+		.append("polyline");
+
+	polyline.transition().duration(1000)
+		.attrTween("points", function(d){
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				var pos = outerArc.centroid(d2);
+				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+				return [arc.centroid(d2), outerArc.centroid(d2), pos];
+			};
+		});
 
   	polyline.exit()
   		.remove();
