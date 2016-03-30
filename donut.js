@@ -207,7 +207,7 @@ function change(data) {
   data0 = data;
   var was = shuffle(data, data0);
   var is = shuffle(data0, data);
-  
+
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
@@ -218,11 +218,11 @@ function change(data) {
 		.attr("class", "slice")
 		.style("fill", function(d) { return color(d.data.label); })
 		.each(function(d) {
-			this._current = d; //whats _current?
+			this._current = d;
 		});
 
 	slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(is), key); //refer to big comment to see what "is" is
+		.data(pie(is), key); 
 
 	slice
 		.transition().duration(index)
