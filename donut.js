@@ -131,7 +131,7 @@ var data = {
 
 //Initialize the svgs
 var svg = d3.select("body")
-	.append("svg")
+	.insert("svg", "p")
 	.append("g")
 
 svg.append("g")
@@ -146,7 +146,7 @@ svg.append("g")
 svg.append("g")
 	.attr("class", "lines");
 
-var width = 860,
+var width = window.innerWidth,
     height = 600,
 	radius = Math.min(width, height) / 2;
 
