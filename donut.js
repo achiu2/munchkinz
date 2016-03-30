@@ -149,7 +149,7 @@ svg.append("g")
 var width = window.innerWidth,
     height = 500,
 	radius = Math.min(width, height) / 2;
-  
+
 svg.attr("transform", "translate(" + width / 2 + "," + (height / 2 - 50) + ")");
 
 var pie = d3.layout.pie()
@@ -166,8 +166,6 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
-
-
 var key = function(d){ return d.data.label; };
 
 var color = d3.scale.ordinal()
@@ -181,12 +179,7 @@ var getData = function getData() {
   })
 };
 
-d3.select('.magic')
-  .on('click', function() {
-    change(getData());
-  });
-
-function mergeWithFirstEqualZero(first, second) {
+function shuffle(first, second) {
   var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
   var onlyFirst = first
   	.filter(function(d){ return !secondSet.has(d.label) })
@@ -197,10 +190,19 @@ function mergeWithFirstEqualZero(first, second) {
   	});
 }
 
+//Event component
+
+var slider = document.getElementById('year');
+slider.addEventListener('change', function(e) {
+e.preventDefault();
+index = e.target.value;
+console.log(index);
+});
+
 function change(data) {
   data0 = data;
-  var was = mergeWithFirstEqualZero(data, data0);
-  var is = mergeWithFirstEqualZero(data0, data);
+  var was = shuffle(data, data0);
+  var is = shuffle(data0, data);
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
@@ -344,14 +346,11 @@ function change(data) {
 
 change(getData());
 
-//Event component
-
-var slider = document.getElementById('year');
-slider.addEventListener('change', function(e) {
-  e.preventDefault();
-  index = e.target.value;
-  console.log(index);
-});
+//NEXT YEAR button
+d3.select('.magic')
+  .on('click', function() {
+    change(getData());
+  });
 
 /* Automatic stuff */
 //Call the change function, change the interval, and move the slider
