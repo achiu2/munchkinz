@@ -337,3 +337,30 @@ magic.addEventListener('click', function(e) {
   change(newData);
 });
 */
+
+/* Automatic stuff */
+//Call the change function, change the interval, and move the slider
+var beginMove = function() {
+  console.log('HI');
+  change(getData());
+  if (index == 1998) {
+    index = 1992;
+    document.getElementById('year').stepDown(6);
+  }
+  else {
+    index++;
+    document.getElementById('year').stepUp();
+  }
+};
+
+var interval;
+var start = document.getElementsByClassName('move')[0];
+start.addEventListener('click', function(e) {
+  console.log('hi');
+  interval = setInterval(beginMove, 3000);
+});
+
+var stop = document.getElementsByClassName('stop')[0];
+stop.addEventListener('click', function(e) {
+  clearInterval(interval);
+});
