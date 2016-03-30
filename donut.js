@@ -165,8 +165,8 @@ svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 var key = function(d){ return d.data.label; };
 
 var color = d3.scale.ordinal()
-	.domain(["Republican","Democrat","Independent"])
-	.range(["#c0392b", "#2980b9", "#95a5a6"])
+	.domain(["Republican","Independent","Democrat"])
+	.range(["#c0392b", "#95a5a6", "#2980b9"])
 
 var getData = function getData() {
   var labels = color.domain();
@@ -175,7 +175,6 @@ var getData = function getData() {
   })
   return data[index.toString()];
 };
-
 
 d3.select('.magic')
   .on('click', function() {
@@ -257,6 +256,7 @@ function change(data) {
   			this._current = this._current || d;
   			var interpolate = d3.interpolate(this._current, d);
   			this._current = interpolate(0);
+        console.log(this);
   			return function(t) {
   				var d2 = interpolate(t);
   				var pos = outerArc.centroid(d2);
