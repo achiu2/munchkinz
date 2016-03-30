@@ -169,7 +169,6 @@ var color = d3.scale.ordinal()
 	.range(["#c0392b", "#2980b9", "#95a5a6"])
 
 var getData = function getData() {
-
   var labels = color.domain();
   return labels.map(function(label) {
     return { label: label, value: data[index.toString()][label]}
@@ -177,17 +176,32 @@ var getData = function getData() {
   return data[index.toString()];
 };
 
+
 d3.select('.magic')
   .on('click', function() {
     change(getData());
   });
 
+function mergeWithFirstEqualZero(first, second) {
+  var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
+  var onlyFirst = first
+  	.filter(function(d){ return !secondSet.has(d.label) })
+		.map(function(d) { return {label: d.label, value: 0}; });
+    	return d3.merge([ second, onlyFirst ])
+  	.sort(function(a,b) {
+  		return d3.ascending(a.label, b.label);
+  	});
+}
+
 function change(data) {
+  data0 = data;
+  var was = mergeWithFirstEqualZero(data, data0);
+  var is = mergeWithFirstEqualZero(data0, data);
 
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(data), key);
+		.data(pie(was), key);
 
 	slice.enter()
 		.insert("path")
@@ -198,7 +212,7 @@ function change(data) {
 		});
 
 	slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(data), key); //refer to big comment to see what "is" is
+		.data(pie(is), key); //refer to big comment to see what "is" is
 
 	slice
 		.transition().duration(index)
@@ -322,5 +336,3 @@ var stop = document.getElementsByClassName('stop')[0];
 stop.addEventListener('click', function(e) {
   clearInterval(interval);
 });
-
-/*
