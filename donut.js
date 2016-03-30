@@ -132,7 +132,7 @@ var data = {
 //Initialize the svgs
 var svg = d3.select("body")
 	.insert("svg", "p")
-	.append("g")
+	.append("g");
 
 svg.append("g")
 	.attr("class", "slices");
@@ -164,7 +164,7 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
-svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+svg.attr("transform", "translate(" + width / 2 + "," + (height / 2 - 50) + ")");
 
 var key = function(d){ return d.data.label; };
 
@@ -199,7 +199,6 @@ function change(data) {
   data0 = data;
   var was = mergeWithFirstEqualZero(data, data0);
   var is = mergeWithFirstEqualZero(data0, data);
-
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
@@ -238,7 +237,7 @@ function change(data) {
     /* ------- TEXT LABELS -------*/
     var text = svg.select('.labels').selectAll('text')
       .data(pie(is), key);
-
+    //TODO: the problem lies here, .text on line 244 is called only once
     text.enter()
       .append('text')
       .attr('dy', '-5px')
@@ -256,7 +255,6 @@ function change(data) {
   			this._current = this._current || d;
   			var interpolate = d3.interpolate(this._current, d);
   			this._current = interpolate(0);
-        console.log(this);
   			return function(t) {
   				var d2 = interpolate(t);
   				var pos = outerArc.centroid(d2);
@@ -278,23 +276,23 @@ function change(data) {
     text.exit()
       .remove();
 
+    /* ------- PERCENTAGE LABELS -------*/
     var percents = svg.select('.percents').selectAll('text')
       .data(pie(is), key);
+
+    console.log(percents);
     percents.enter()
       .append('text')
-      .attr('dy', '+20px')
+      .attr('dy', '20px')
       .text(function(d) {
         return d.value+'%';
       });
-
-      console.log(percents);
 
       percents.transition().duration(1000)
     		.attrTween("transform", function(d) {
     			this._current = this._current || d;
     			var interpolate = d3.interpolate(this._current, d);
     			this._current = interpolate(0);
-          console.log(this);
     			return function(t) {
     				var d2 = interpolate(t);
     				var pos = outerArc.centroid(d2);
@@ -315,7 +313,6 @@ function change(data) {
 
     	percents.exit()
     		.remove();
-
 
   /* ------- SLICE TO TEXT POLYLINES -------*/
 
