@@ -4,9 +4,9 @@
 *
 */
 
-var index = document.getElementById('year').value;
-var max = document.getElementById('year').max;
-var min = document.getElementById('year').min;
+var index = document.getElementById('year').value;  //current user inputted year
+var max = document.getElementById('year').max;  //max year user can input (1992)
+var min = document.getElementById('year').min;  //min year user can input (2015)
 
 var data = {
   "1992": {
@@ -171,17 +171,6 @@ var color = d3.scale.ordinal()
 	.domain(["Republican","Democrat","Independent"])
 	.range(["#c0392b", "#2980b9", "#95a5a6"])
 
-function mergeWithFirstEqualZero(first, second){
-  var secondSet = d3.set();
-  second.forEach(function(d) { secondSet.add(d.label); });
-  var onlyFirst = first
-    .filter(function(d){ return !secondSet.has(d.label) })
-    .map(function(d) { return {label: d.label, value: 0}; });
-  return d3.merge([ second, onlyFirst ])
-    .sort(function(a,b) {
-      return d3.ascending(a.label, b.label);
-    });
-}
 var getData = function getData() {
 
   var labels = color.domain();
@@ -197,23 +186,11 @@ d3.select('.magic')
   });
 
 function change(data) {
-	//var duration = document.getElementById('year').value;
-	//var data0 = svg.select(".slices").selectAll("path.slice")
-		//.data().map( getData, function(d) { return d.data });
-  //console.log(data);
-  //console.log(data0);
-	//if (data0.length == 0) data0 = data;
-  data0 = data;
-	var was = mergeWithFirstEqualZero(data, data0);
-	var is = mergeWithFirstEqualZero(data0, data);
-  //console.log(was);
-  //console.log(is);
-  //Change the data Republicanresented on the donut graph based on a subset of the data
 
 	/* ------- SLICE ARCS -------*/
 
 	var slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(was), key); //refer to couple lines above to see what "was" is
+		.data(pie(data), key);
 
 	slice.enter()
 		.insert("path")
@@ -224,7 +201,7 @@ function change(data) {
 		});
 
 	slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(is), key); //refer to big comment to see what "is" is
+		.data(pie(data), key); //refer to big comment to see what "is" is
 
 	slice
 		.transition().duration(index)
