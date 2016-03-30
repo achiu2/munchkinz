@@ -172,6 +172,16 @@ var color = d3.scale.ordinal()
 	.domain(["Republican","Independent","Democrat"])
 	.range(["#c0392b", "#95a5a6", "#2980b9"])
 
+
+  //Event component
+var slider = document.getElementById('year');
+  slider.addEventListener('change', function(e) {
+  e.preventDefault();
+  index = e.target.value;
+  console.log(index);
+});
+
+//Retrieves appropriate set from data, returns map for change()
 var getData = function getData() {
   var labels = color.domain();
   return labels.map(function(label) {
@@ -179,6 +189,7 @@ var getData = function getData() {
   })
 };
 
+//for animation
 function shuffle(first, second) {
   var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
   var onlyFirst = first
@@ -189,15 +200,6 @@ function shuffle(first, second) {
   		return d3.ascending(a.label, b.label);
   	});
 }
-
-//Event component
-
-var slider = document.getElementById('year');
-slider.addEventListener('change', function(e) {
-e.preventDefault();
-index = e.target.value;
-console.log(index);
-});
 
 function change(data) {
   data0 = data;
