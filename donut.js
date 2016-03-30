@@ -254,8 +254,8 @@ function mergeWithFirstEqualZero(first, second){
       return d3.ascending(a.label, b.label);
     });
 }
-
 var getData = function getData() {
+
   var labels = color.domain();
   return labels.map(function(label) {
     return { label: label, value: data[index.toString()][label]}
