@@ -4,7 +4,7 @@
 *
 */
 
-var index = 1995;
+var index = 1992;
 
 var data = {
   "1992": {
@@ -41,94 +41,92 @@ var data = {
     "Republican":"28",
     "Democrat":"34",
     "Independent":"31"
-  }
-  /*
-  ,
+  },
   "1999": {
-    "rep":"27",
-    "dem":"33",
-    "indep":"34"
+    "Republican":"27",
+    "Democrat":"33",
+    "Independent":"34"
   },
   "2000": {
-    "rep":"28",
-    "dem":"33",
-    "indep":"29"
+    "Republican":"28",
+    "Democrat":"33",
+    "Independent":"29"
   },
   "2001": {
-    "rep":"29",
-    "dem":"34",
-    "indep":"29"
+    "Republican":"29",
+    "Democrat":"34",
+    "Independent":"29"
   },
   "2002": {
-    "rep":"30",
-    "dem":"31",
-    "indep":"30"
+    "Republican":"30",
+    "Democrat":"31",
+    "Independent":"30"
   },
   "2003": {
-    "rep":"30",
-    "dem":"31",
-    "indep":"31"
+    "Republican":"30",
+    "Democrat":"31",
+    "Independent":"31"
   },
   "2004": {
-    "rep":"",
-    "dem":"",
-    "indep":""
+    "Republican":"",
+    "Democrat":"",
+    "Independent":""
   },
   "2005": {
-    "rep":"29",
-    "dem":"33",
-    "indep":"30"
+    "Republican":"29",
+    "Democrat":"33",
+    "Independent":"30"
   },
   "2006": {
-    "rep":"28",
-    "dem":"33",
-    "indep":"30"
+    "Republican":"28",
+    "Democrat":"33",
+    "Independent":"30"
   },
   "2007": {
-    "rep":"25",
-    "dem":"33",
-    "indep":"34"
+    "Republican":"25",
+    "Democrat":"33",
+    "Independent":"34"
   },
   "2008": {
-    "rep":"25",
-    "dem":"35",
-    "indep":"31"
+    "Republican":"25",
+    "Democrat":"35",
+    "Independent":"31"
   },
   "2009": {
-    "rep":"24",
-    "dem":"34",
-    "indep":"35"
+    "Republican":"24",
+    "Democrat":"34",
+    "Independent":"35"
   },
   "2010": {
-    "rep":"25",
-    "dem":"33",
-    "indep":"36"
+    "Republican":"25",
+    "Democrat":"33",
+    "Independent":"36"
   },
   "2011": {
-    "rep":"24",
-    "dem":"32",
-    "indep":"37"
+    "Republican":"24",
+    "Democrat":"32",
+    "Independent":"37"
   },
   "2012": {
-    "rep":"25",
-    "dem":"32",
-    "indep":"37"
+    "Republican":"25",
+    "Democrat":"32",
+    "Independent":"37"
   },
   "2013": {
-    "rep":"24",
-    "dem":"32",
-    "indep":"38"
+    "Republican":"24",
+    "Democrat":"32",
+    "Independent":"38"
   },
   "2014": {
-    "rep":"23",
-    "dem":"32",
-    "indep":"39"
+    "Republican":"23",
+    "Democrat":"32",
+    "Independent":"39"
   },
   "2015": {
-    "rep":"23.7",
-    "dem":"30.4",
-    "indep":"40.1"
-  }*/
+    "Republican":"23.7",
+    "Democrat":"30.4",
+    "Independent":"40.1"
+  }
 };
 
 //Initialize the svgs
@@ -199,7 +197,7 @@ var color = d3.scale.ordinal()
   	if (data0.length == 0) data0 = data;
   	var was = mergeWithFirstEqualZero(data, data0);
   	var is = mergeWithFirstEqualZero(data0, data);
-    //Change the data represented on the donut graph based on a subset of the data
+    //Change the data Republicanresented on the donut graph based on a subset of the data
 
   	 ------- SLICE ARCS -------
 
@@ -238,9 +236,9 @@ var color = d3.scale.ordinal()
   */
 
 /*Outputs object "1992": {
-  "rep":"28",
-  "dem":"33",
-  "indep":"36"
+  "Republican":"28",
+  "Democrat":"33",
+  "Independent":"36"
 }*/
 
 function mergeWithFirstEqualZero(first, second){
@@ -282,7 +280,7 @@ function change(data) {
 	var is = mergeWithFirstEqualZero(data0, data);
   //console.log(was);
   //console.log(is);
-  //Change the data represented on the donut graph based on a subset of the data
+  //Change the data Republicanresented on the donut graph based on a subset of the data
 
 	/* ------- SLICE ARCS -------*/
 
