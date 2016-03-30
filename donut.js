@@ -1,7 +1,5 @@
 /* Software Development p.3
 *  By: Amanda Chiu, Wayez Chowdhury, Jeffrey Zou
-*
-*
 */
 
 var index = document.getElementById('year').value;  //current user inputted year
@@ -138,12 +136,11 @@ var svg = d3.select("body")
 
 svg.append("g")
 	.attr("class", "slices");
-  /*
+
 svg.append("g")
 	.attr("class", "labels");
 svg.append("g")
 	.attr("class", "lines");
-*/
 
 var width = 860,
     height = 600,
@@ -220,6 +217,74 @@ function change(data) {
 	slice
 		.exit().transition().delay(index).duration(0)
 		.remove();
+
+
+    /* ------- TEXT LABELS -------*/
+    var text = svg.select('.labels').selectAll('text')
+      .data(pie(is), key);
+
+    text.enter()
+      .append('text')
+      .attr('dy', '0.35em')
+      .text(function(d) {
+        return d.data.label;
+      });
+
+    //Find the angle halfway between the end of the beginning
+    function midAngle(d) {
+      return d.startAngle + (d.endAngle - d.startAngle) / 2;
+    }
+
+    text.transition().duration(1000)
+  		.attrTween("transform", function(d) {
+  			this._current = this._current || d;
+  			var interpolate = d3.interpolate(this._current, d);
+  			this._current = interpolate(0);
+  			return function(t) {
+  				var d2 = interpolate(t);
+  				var pos = outerArc.centroid(d2);
+          console.log(pos);
+          //If the half-way angle is less than pi -> radius * 1 else radius * -1
+  				pos[0] = radius * (midAngle(d2) < Math.PI ? -1 : 1);
+  				return "translate("+ pos +")";
+  			};
+  		})
+  		.styleTween("text-anchor", function(d){
+  			this._current = this._current || d;
+  			var interpolate = d3.interpolate(this._current, d);
+  			this._current = interpolate(0);
+  			return function(t) {
+  				var d2 = interpolate(t);
+  				return midAngle(d2) < Math.PI ? "start":"end";
+  			};
+  		});
+
+  	text.exit()
+  		.remove();
+
+    /* ------- SLICE TO TEXT POLYLINES -------*/
+
+  	var polyline = svg.select(".lines").selectAll("polyline")
+  		.data(pie(data), key);
+
+  	polyline.enter()
+  		.append("polyline");
+
+  	polyline.transition().duration(1000)
+  		.attrTween("points", function(d){
+  			this._current = this._current || d;
+  			var interpolate = d3.interpolate(this._current, d);
+  			this._current = interpolate(0);
+  			return function(t) {
+  				var d2 = interpolate(t);
+  				var pos = outerArc.centroid(d2);
+  				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+  				return [arc.centroid(d2), outerArc.centroid(d2), pos];
+  			};
+  		});
+
+  	polyline.exit()
+  		.remove();
   };
 
 change(getData());
@@ -257,3 +322,5 @@ var stop = document.getElementsByClassName('stop')[0];
 stop.addEventListener('click', function(e) {
   clearInterval(interval);
 });
+
+/*
