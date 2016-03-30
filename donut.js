@@ -4,7 +4,7 @@
 *
 */
 
-var index = 1992;
+var index = 1995;
 
 var data = {
   "1992": {
@@ -244,8 +244,8 @@ var color = d3.scale.ordinal()
 }*/
 
 function mergeWithFirstEqualZero(first, second){
-  var secondSet = d3.set(); second.forEach(function(d) { secondSet.add(d.label); });
-
+  var secondSet = d3.set();
+  second.forEach(function(d) { secondSet.add(d.label); });
   var onlyFirst = first
     .filter(function(d){ return !secondSet.has(d.label) })
     .map(function(d) { return {label: d.label, value: 0}; });
@@ -257,25 +257,31 @@ function mergeWithFirstEqualZero(first, second){
 
 
 /* TODO: i = (index) year from draggy bar element in HTML */
-var getData = function getData(i) {
+var getData = function getData() {
   var labels = color.domain();
   return labels.map(function(label) {
-    return { label: label, value: data[i.toString()][label]}
+    return { label: label, value: data[index.toString()][label]}
   })
   return data[index.toString()];
 };
 
-change(getData(document.getElementById("year").value));
+d3.select('.magic')
+  .on('click', function() {
+    change(getData());
+  });
 
 function change(data) {
-	var duration = document.getElementById('year').value;
-	var data0 = svg.select(".slices").selectAll("path.slice")
-		.data().map( getData, function(d) { return d.data });
-	if (data0.length == 0) data0 = data;
+	//var duration = document.getElementById('year').value;
+	//var data0 = svg.select(".slices").selectAll("path.slice")
+		//.data().map( getData, function(d) { return d.data });
+  //console.log(data);
+  //console.log(data0);
+	//if (data0.length == 0) data0 = data;
+  data0 = data;
 	var was = mergeWithFirstEqualZero(data, data0);
 	var is = mergeWithFirstEqualZero(data0, data);
-  console.log(was);
-  console.log(is);
+  //console.log(was);
+  //console.log(is);
   //Change the data represented on the donut graph based on a subset of the data
 
 	/* ------- SLICE ARCS -------*/
@@ -295,7 +301,7 @@ function change(data) {
 		.data(pie(is), key); //refer to big comment to see what "is" is
 
 	slice
-		.transition().duration(duration)
+		.transition().duration(index)
 		.attrTween("d", function(d) {
 			var interpolate = d3.interpolate(this._current, d);
 			var _this = this;
@@ -309,6 +315,25 @@ function change(data) {
 		.data(pie(data), key);
 
 	slice
-		.exit().transition().delay(duration).duration(0)
+		.exit().transition().delay(index).duration(0)
 		.remove();
   };
+
+change(getData());
+
+//Event components
+
+var slider = document.getElementById('year');
+slider.addEventListener('change', function(e) {
+  e.preventDefault();
+  index = e.target.value;
+  console.log(index);
+});
+/*
+var magic = document.getElementsByClassName('magic')[0];
+magic.addEventListener('click', function(e) {
+  e.preventDefault();
+  var newData = getData();
+  change(newData);
+});
+*/
