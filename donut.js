@@ -237,6 +237,8 @@ function change(data) {
     var text = svg.select('.labels').selectAll('text')
       .data(pie(is), key);
 
+    console.log(text);
+
     text.enter()
       .append('text')
       .attr('dy', '0.35em')
@@ -244,6 +246,7 @@ function change(data) {
         return d.data.label;
       });
 
+    console.log(text);
     //Find the angle halfway between the end of the beginning
     function midAngle(d) {
       return d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -257,7 +260,6 @@ function change(data) {
   			return function(t) {
   				var d2 = interpolate(t);
   				var pos = outerArc.centroid(d2);
-          console.log(pos);
           //If the half-way angle is less than pi -> radius * 1 else radius * -1
   				pos[0] = radius * (midAngle(d2) < Math.PI ? -1 : 1);
   				return "translate("+ pos +")";
